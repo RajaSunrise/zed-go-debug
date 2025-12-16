@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Go Debug Configuration",
+  "type": "object",
+  "properties": {
+    "program": {
+      "type": "string",
+      "description": "Path to the program folder (or any file within that folder) when in 'debug' or 'test' mode, or to the pre-built binary file to debug in 'exec' mode.",
+      "default": "${fileDirname}"
+    },
+    "mode": {
+      "type": "string",
+      "description": "One of 'debug', 'test', 'exec', 'auto', 'remote'.",
+      "enum": ["debug", "test", "exec", "auto", "remote"],
+      "default": "auto"
+    },
+    "args": {
+      "type": "array",
+      "description": "Command line arguments passed to the debugged program.",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "cwd": {
+      "type": "string",
+      "description": "Workspace relative or absolute path to the working directory of the program being debugged. Default is the current workspace.",
+      "default": "${workspaceFolder}"
+    },
+    "env": {
+      "type": "object",
+      "description": "Environment variables passed to the program.",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "default": {}
+    },
+    "buildFlags": {
+      "type": "string",
+      "description": "Build flags to pass to the Go compiler."
+    },
+    "remotePath": {
+      "type": "string",
+      "description": "The path to the source code on the remote machine (for remote debugging)."
+    },
+    "port": {
+      "type": "integer",
+      "description": "The port to connect to (for remote debugging).",
+      "default": 2345
+    },
+    "host": {
+      "type": "string",
+      "description": "The host to connect to (for remote debugging).",
+      "default": "127.0.0.1"
+    },
+    "trace": {
+      "type": "string",
+      "description": "Enable logging of the Debug Adapter Protocol.",
+      "enum": ["verbose", "log", "error"],
+      "default": "error"
+    },
+    "showLog": {
+      "type": "boolean",
+      "description": "If true, show log output from the debugger.",
+      "default": false
+    },
+    "substitutePath": {
+      "type": "array",
+      "description": "Path mappings to apply to source paths sent to the debugger.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "from": { "type": "string" },
+          "to": { "type": "string" }
+        },
+        "required": ["from", "to"]
+      }
+    },
+    "processId": {
+        "type": ["integer", "string"],
+        "description": "The process ID to attach to."
+    }
+  },
+  "required": ["adapter"]
+}

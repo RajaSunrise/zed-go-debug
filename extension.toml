@@ -5,3 +5,6 @@ schema_version = 1
 authors = ["RajaSunrise"]
 description = "Enhanced Go debugging experience for Zed, inspired by GoLand."
 repository = "https://github.com/RajaSunrise/zed-go-debug"
+
+[debug_adapters.go-debug]
+schema_path = "debug_adapter_schemas/go-debug.json"
