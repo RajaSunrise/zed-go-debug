@@ -5,11 +5,11 @@ use zed_extension_api::{
     StartDebuggingRequestArguments, StartDebuggingRequestArgumentsRequest, Worktree,
 };
 
-struct GoDebuggerPro {
+struct GoDebug {
     cached_binary_path: Option<String>,
 }
 
-impl GoDebuggerPro {
+impl GoDebug {
     fn new() -> Self {
         Self {
             cached_binary_path: None,
@@ -54,7 +54,7 @@ impl GoDebuggerPro {
     }
 }
 
-impl Extension for GoDebuggerPro {
+impl Extension for GoDebug {
     fn new() -> Self {
         Self::new()
     }
@@ -66,7 +66,7 @@ impl Extension for GoDebuggerPro {
         user_provided_debug_adapter_path: Option<String>,
         worktree: &Worktree,
     ) -> Result<DebugAdapterBinary, String> {
-        if adapter_name != "go-delve-pro" {
+        if adapter_name != "go-debug" {
             return Err(format!("Unknown adapter: {}", adapter_name));
         }
 
@@ -115,4 +115,4 @@ impl Extension for GoDebuggerPro {
     }
 }
 
-zed::register_extension!(GoDebuggerPro);
+zed::register_extension!(GoDebug);

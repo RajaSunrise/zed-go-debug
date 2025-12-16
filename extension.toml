@@ -1,7 +1,7 @@
-id = "go-debugger-pro"
-name = "Go Debugger Pro"
+id = "go-debug"
+name = "Go Debug"
 version = "0.0.1"
 schema_version = 1
-authors = ["Jules"]
+authors = ["RajaSunrise"]
 description = "Enhanced Go debugging experience for Zed, inspired by GoLand."
-repository = "https://github.com/example/zed-go-debugger-pro"
+repository = "https://github.com/RajaSunrise/zed-go-debug"

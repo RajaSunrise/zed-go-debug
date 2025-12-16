@@ -1,10 +1,10 @@
-# Go Debugger Pro for Zed
+# Go Debug
 
 This extension provides an enhanced Go debugging experience for Zed, aiming to match the convenience and power of GoLand. It wraps the Delve debugger (`dlv`) and provides configuration templates for common debugging scenarios.
 
 ## Features
 
-- **Custom Debug Adapter**: Registers `go-delve-pro` adapter.
+- **Custom Debug Adapter**: Registers `go-debug` adapter.
 - **Auto-detection**: Smart detection of `dlv` binary in common locations (`$GOPATH/bin`, Homebrew, etc.).
 - **GoLand-like Workflows**: Instructions and configurations to replicate GoLand's debugging capabilities.
 
@@ -32,7 +32,7 @@ Use this to debug the `main` package in the current directory.
   "program": "go",
   "args": ["run", "."],
   "env": {},
-  "adapter": "go-delve-pro"
+  "adapter": "go-debug"
 }
 ```
 
@@ -45,7 +45,7 @@ Use this to debug the `main` package in the current directory.
   "label": "Debug Tests",
   "program": "go",
   "args": ["test", "-v", "."],
-  "adapter": "go-delve-pro"
+  "adapter": "go-debug"
 }
 ```
 
@@ -58,7 +58,7 @@ However, the most common "Attach" workflow in local dev is attaching to a runnin
 ```json
 {
   "label": "Attach to Process ID",
-  "adapter": "go-delve-pro",
+  "adapter": "go-debug",
   "configuration": {
     "request": "attach",
     "mode": "local",
@@ -74,7 +74,7 @@ Connect to a headless Delve server running on a remote machine (or Docker contai
 ```json
 {
   "label": "Remote Debug",
-  "adapter": "go-delve-pro",
+  "adapter": "go-debug",
   "configuration": {
     "request": "attach",
     "mode": "remote",
