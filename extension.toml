@@ -8,3 +8,8 @@ repository = "https://github.com/RajaSunrise/zed-go-debug"
 
 [debug_adapters.go-debug]
 schema_path = "debug_adapter_schemas/go-debug.json"
+
+[slash_commands.go-debug]
+description = "Go Debug utilities"
+tooltip_text = "Utilities for checking Go Debug environment"
+requires_argument = true

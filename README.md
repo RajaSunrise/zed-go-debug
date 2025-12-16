@@ -6,6 +6,8 @@ This extension provides an enhanced Go debugging experience for Zed, aiming to m
 
 - **Custom Debug Adapter**: Registers `go-debug` adapter.
 - **Auto-detection**: Smart detection of `dlv` binary in common locations (`$GOPATH/bin`, Homebrew, etc.).
+- **Automatic Debugging**: Automatically generates debug configurations for `go run` and `go test` tasks. Just click "Debug" on any Go task!
+- **Health Check**: Use `/go-debug check` to verify your environment.
 - **GoLand-like Workflows**: Instructions and configurations to replicate GoLand's debugging capabilities.
 
 ## Prerequisites
@@ -20,9 +22,23 @@ Ensure `dlv` is in your `PATH` or `$GOPATH/bin`.
 
 ## Usage
 
-To use the "GoLand-like" debugging features, you should configure your `.zed/debug.json` with the following templates.
+### Automatic Debugging
 
-### 1. Debug Main (Current Package)
+The extension automatically detects Go tasks (like `go run` or `go test`) and creates a debug configuration for them.
+1. Open the Tasks modal (`task: spawn` or `shift-f10` if you used the recommended keybindings).
+2. Find a "Go Run" or "Go Test" task.
+3. Click the "Debug" icon next to it (or press the debug keybinding).
+4. The extension will automatically configure Delve to debug that specific file or package.
+
+### Health Check
+
+Type `/go-debug check` in the editor (CMD-K or via Slash Command menu) to verify that the extension can find `dlv`.
+
+### Manual Configuration (GoLand Style)
+
+To use the "GoLand-like" debugging features manually, you can configure your `.zed/debug.json` with the following templates.
+
+#### 1. Debug Main (Current Package)
 
 Use this to debug the `main` package in the current directory.
 
@@ -38,7 +54,7 @@ Use this to debug the `main` package in the current directory.
 
 *Note: Zed's built-in Go support handles `func main` automatically, but you can customize it here.*
 
-### 2. Debug Test (Current Package)
+#### 2. Debug Test (Current Package)
 
 ```json
 {
@@ -49,7 +65,7 @@ Use this to debug the `main` package in the current directory.
 }
 ```
 
-### 3. Attach to Process (GoLand "Attach to Process")
+#### 3. Attach to Process (GoLand "Attach to Process")
 
 This requires running `dlv` in headless mode or using `dlv attach` externally, but via DAP we can attach to a running server if configured.
 
@@ -67,7 +83,7 @@ However, the most common "Attach" workflow in local dev is attaching to a runnin
 }
 ```
 
-### 4. Remote Debugging
+#### 4. Remote Debugging
 
 Connect to a headless Delve server running on a remote machine (or Docker container).
 

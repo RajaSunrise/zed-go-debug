@@ -1,8 +1,9 @@
 use std::fs;
 use std::path::Path;
 use zed_extension_api::{
-    self as zed, serde_json, DebugAdapterBinary, DebugTaskDefinition, Extension, Result,
-    StartDebuggingRequestArguments, StartDebuggingRequestArgumentsRequest, Worktree,
+    self as zed, serde_json, DebugAdapterBinary, DebugTaskDefinition, DebugScenario, Extension, Result,
+    StartDebuggingRequestArguments, StartDebuggingRequestArgumentsRequest, TaskTemplate, Worktree,
+    SlashCommand, SlashCommandOutput, SlashCommandOutputSection,
 };
 
 struct GoDebug {
@@ -97,6 +98,83 @@ impl Extension for GoDebug {
                 request: request_type,
             },
         })
+    }
+
+    fn dap_request_kind(
+        &mut self,
+        _adapter_name: String,
+        config: serde_json::Value,
+    ) -> Result<StartDebuggingRequestArgumentsRequest, String> {
+        if config.get("request").and_then(|s| s.as_str()) == Some("attach") {
+             Ok(StartDebuggingRequestArgumentsRequest::Attach)
+        } else {
+             Ok(StartDebuggingRequestArgumentsRequest::Launch)
+        }
+    }
+
+    fn dap_locator_create_scenario(
+        &mut self,
+        _locator_name: String,
+        task: TaskTemplate,
+        _resolved_label: String,
+        _debug_adapter_name: String,
+    ) -> Option<DebugScenario> {
+        if task.command != "go" {
+            return None;
+        }
+
+        let args = task.args;
+        if args.is_empty() {
+            return None;
+        }
+
+        let mode;
+        let program;
+
+        if args[0] == "test" {
+             mode = "test";
+             program = ".";
+        } else if args[0] == "run" {
+             mode = "debug";
+             if args.len() > 1 {
+                 program = args[1].as_str();
+             } else {
+                 program = ".";
+             }
+        } else {
+             return None;
+        }
+
+        let config = serde_json::json!({
+            "mode": mode,
+            "program": program,
+            "request": "launch"
+        });
+
+        Some(DebugScenario {
+            label: format!("Debug Go {}", mode),
+            adapter: "go-debug".to_string(),
+            build: None,
+            config: config.to_string(),
+            tcp_connection: None,
+        })
+    }
+
+    fn run_slash_command(
+        &self,
+        command: SlashCommand,
+        args: Vec<String>,
+        _worktree: Option<&Worktree>,
+    ) -> Result<SlashCommandOutput, String> {
+        if command.name == "go-debug" {
+             if args.get(0).map(|s| s.as_str()) == Some("check") {
+                 return Ok(SlashCommandOutput {
+                     text: "Go Debug Extension: OK. \nTo check Delve: run `dlv version` in terminal.".to_string(),
+                     sections: vec![],
+                 });
+             }
+        }
+        Err("Unknown command".to_string())
     }
 
     fn suggest_docs_packages(&self, provider: String) -> Result<Vec<String>, String> {
